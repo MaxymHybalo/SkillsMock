@@ -12,44 +12,47 @@ public class ParticleEmitter : MonoBehaviour {
 
 	public int topIntensivity = 40;
 
+	//Const for caclculation circle area
+	public float R = 6f;
 
 	private GameObject[] lights;
 
-	void Start () {
-		for (int i = 0; i <= particles; i++) {
-			CreateNewParticle (particle);
-		}
-	}
-
 	void FixedUpdate(){
-		lights = GameObject.FindGameObjectsWithTag ("Particle");
+
 		FindAndDestroy (lights);
+
 	}
 
-	void Update(){
+	//params x,z used for randomize position around mouse's pointer
+	public void InitParticles(float x, float z){ 
 		lights = GameObject.FindGameObjectsWithTag ("Particle");
-		if (lights.Length <= particles) {
-			CreateNewParticle (particle);
-			for (int i = lights.Length; i < particles; i++)
-				CreateNewParticle (particle);
-		}
+		for (int i = lights.Length; i < particles; i++)
+			CreateNewParticle (particle, x, z);
 	}
 
-	private void CreateNewParticle(GameObject particle){
+	private void CreateNewParticle(GameObject particle, float x, float z){
 		Instantiate (particle);
-		particle.transform.position = new Vector3 (Random.Range(-18,18), 0.5f, Random.Range(-40,40));
+		//particle.transform.position = new Vector3 (x, 0.5f, z);
+		particle.transform.position = new Vector3 (GetCircularCoordinate(x), 0.5f, GetCircularCoordinate(z));
 		particle.GetComponent<ParticleBehaviour > ().BOTTOM_INTENSIVITY = Random.Range (bottomIntensivity-3, bottomIntensivity);
 		particle.GetComponent<ParticleBehaviour > ().TOP_INTENSIVITY = Random.Range (topIntensivity-10, topIntensivity);
 
 	}
 
 	private void FindAndDestroy(GameObject[] lights){
+		lights = GameObject.FindGameObjectsWithTag ("Particle");		
 		foreach (GameObject o in lights) {
 			bool oState = o.GetComponent<ParticleBehaviour > ().cycle;
 			if (oState) {
 				Destroy (o);
 			}
 		}
+	}
+
+	private float GetCircularCoordinate(float center){
+		float random = Random.Range (0f, R);
+
+		return Random.Range (center - R/2, center + R/2);
 	}
 
 }

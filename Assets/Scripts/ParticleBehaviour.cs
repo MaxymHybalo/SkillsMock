@@ -27,7 +27,6 @@ public class ParticleBehaviour : MonoBehaviour {
 		if (intensity < BOTTOM_INTENSIVITY) {
 			loop = false;
 			cycle = true;
-
 		}
 	}
 }

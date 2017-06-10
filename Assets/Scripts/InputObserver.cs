@@ -7,7 +7,6 @@ public class InputObserver : MonoBehaviour {
 	public int MAX_PARTICLES = 250;
 	public int MIN_PARTICLES = 5;
 
-
 	private const int MIN_INTENSIVITY_RANGE = 10;
 	private const int MAX_INTENSIVITY = 60;
 
@@ -29,17 +28,15 @@ public class InputObserver : MonoBehaviour {
 
 	void FixedUpdate () {
 		ParticleEmitter emitterState = emitter.GetComponent<ParticleEmitter> ();
-		handleEmission(emitterState);
-		handleIntensivity (emitterState);
-		handleRadius (emitterState);
-		handleSpeed (emitterState);
-		handleColor (emitterState);
-
-
+		HandleEmission(emitterState);
+		HandleIntensivity (emitterState);
+		HandleRadius (emitterState);
+		HandleSpeed (emitterState);
+		HandleColor (emitterState);
 	}
 
 
-	private void handleEmission(ParticleEmitter emission){
+	private void HandleEmission(ParticleEmitter emission){
 		int particles = emission.particles;
 		if(Input.GetKey(KeyCode.UpArrow))
 			emission.particles = (particles < MAX_PARTICLES) ? particles+=1 : MAX_PARTICLES;
@@ -47,7 +44,7 @@ public class InputObserver : MonoBehaviour {
 			emission.particles = (particles > MIN_PARTICLES) ? particles-=1 : MIN_PARTICLES;
 	}
 
-	private void handleIntensivity(ParticleEmitter emitterState){
+	private void HandleIntensivity(ParticleEmitter emitterState){
 		int top = emitterState.topIntensivity;
 		int bottom = emitterState.bottomIntensivity;
 		int delta = top - bottom;
@@ -57,7 +54,7 @@ public class InputObserver : MonoBehaviour {
 			emitterState.topIntensivity = (delta >= MIN_INTENSIVITY_RANGE) ? top -=1 : top; 
 	}
 
-	private void handleRadius(ParticleEmitter emitterState){
+	private void HandleRadius(ParticleEmitter emitterState){
 		float range = emitterState.particle.GetComponent<Light> ().range;
 		bool inScope = range >= MIN_RANGE & range <= MAX_RANGE;
 		if (Input.GetKey (KeyCode.Q))
@@ -66,7 +63,7 @@ public class InputObserver : MonoBehaviour {
 			emitterState.particle.GetComponent<Light> ().range = range >= MIN_RANGE ? range -= RANGE_STEP : range; 
 	}
 
-	private void handleSpeed(ParticleEmitter emitterState){
+	private void HandleSpeed(ParticleEmitter emitterState){
 		float speed = emitterState.particle.GetComponent<ParticleBehaviour> ().delta;
 		if(Input.GetKey(KeyCode.S))
 			emitterState.particle.GetComponent<ParticleBehaviour> ().delta = speed > MIN_SPEED ? speed -= RANGE_STEP : speed;
@@ -74,7 +71,7 @@ public class InputObserver : MonoBehaviour {
 			emitterState.particle.GetComponent<ParticleBehaviour> ().delta = speed < MAX_SPEED ? speed += RANGE_STEP : speed;
 	}
 
-	private void handleColor(ParticleEmitter emitterState){
+	private void HandleColor(ParticleEmitter emitterState){
 		
 		Color color = emitterState.particle.GetComponent<Light> ().color;
 		if (Input.GetKey (KeyCode.R)) 
